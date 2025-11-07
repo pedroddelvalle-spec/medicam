@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedicShare - Donación de Medicamentos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --light: #F7F9FC;
+            --dark: #2B2D42;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1a6a8a;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(46, 134, 171, 0.1);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1585435557343-3b092031d5ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* How it works */
+        .how-it-works {
+            background-color: white;
+            padding: 80px 0;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -10px;
+            width: 50%;
+            height: 2px;
+            background-color: var(--primary);
+            opacity: 0.3;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        /* Medicines Section */
+        .medicines {
+            padding: 80px 0;
+        }
+        
+        .medicines-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .filter-select {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .medicines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .medicine-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .medicine-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .medicine-image {
+            height: 180px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .medicine-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .medicine-card:hover .medicine-image img {
+            transform: scale(1.05);
+        }
+        
+        .medicine-info {
+            padding: 20px;
+        }
+        
+        .medicine-name {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .medicine-details {
+            margin-bottom: 15px;
+        }
+        
+        .medicine-detail {
+            display: flex;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            min-width: 100px;
+        }
+        
+        .expiry-date {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .expiry-soon {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .expiry-valid {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .expiry-expired {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .medicine-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        /* Forms */
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        /* Ads */
+        .ad-space {
+            background-color: #f9f9f9;
+            border: 1px dashed #ddd;
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+            border-radius: 8px;
+        }
+        
+        .ad-space p {
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            background-color: #f9f9f9;
+            padding: 80px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .testimonial-content {
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            .steps {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .medicines-filter {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzJFOEU2QUIiPjxwYXRoIGQ9Ik0xOSw4SDVWMjBIMTlWOFpNMTcsMTBIMTJWMTZIMTdWMTBaTTcsMkgxN1Y2SDdWMloiLz48L3N2Zz4=" alt="MedicShare Logo">
+                    <h1>MedicShare</h1>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#medicamentos">Medicamentos</a></li>
+                        <li><a href="#donar">Donar</a></li>
+                        <li><a href="#buscar">Buscar</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Iniciar Sesión</button>
+                    <button class="btn btn-primary">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h2>Conectamos medicamentos con quienes los necesitan</h2>
+            <p>Una plataforma segura para donar medicamentos que ya no usas y ayudar a personas que los necesitan</p>
+            <button class="btn btn-primary" style="padding: 12px 24px; font-size: 1.1rem;">Donar Medicamentos</button>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>¿Por qué usar MedicShare?</h2>
+                <p>Una plataforma diseñada para facilitar la donación segura de medicamentos</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Seguro y Confiable</h3>
+                    <p>Verificamos la identidad de todos los usuarios y validamos la información de los medicamentos para garantizar transacciones seguras.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-pills"></i></div>
+                    <h3>Medicamentos Verificados</h3>
+                    <p>Todos los medicamentos son revisados para asegurar que estén en buen estado y con fecha de vencimiento válida.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-hands-helping"></i></div>
+                    <h3>Comunidad Solidaria</h3>
+                    <p>Conectamos a personas que desean ayudar con quienes necesitan medicamentos específicos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>¿Cómo funciona?</h2>
+                <p>En solo 3 sencillos pasos puedes donar o recibir medicamentos</p>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Regístrate</h3>
+                    <p>Crea tu cuenta verificada para acceder a todas las funcionalidades de la plataforma.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Publica o Busca</h3>
+                    <p>Si tienes medicamentos para donar, publícalos. Si necesitas alguno, busca en nuestro catálogo.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Conecta y Ayuda</h3>
+                    <p>Coordinamos la entrega segura entre donante y receptor para completar la donación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ad Space -->
+    <div class="container">
+        <div class="ad-space">
+            <p>Espacio publicitario</p>
+            <img src="https://images.unsplash.com/photo-1665686374006-b8f04cf62d57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Publicidad Farmacéutica" style="max-width: 100%; height: auto; border-radius: 4px;">
+            <button class="btn btn-outline" style="margin-top: 15px;">Anúnciate aquí</button>
+        </div>
+    </div>
+
+    <!-- Medicines Section -->
+    <section class="medicines" id="medicamentos">
+        <div class="container">
+            <div class="section-title">
+                <h2>Medicamentos Disponibles</h2>
+                <p>Explora los medicamentos que la comunidad ha donado</p>
+            </div>
+            
+            <div class="medicines-filter">
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar medicamento...">
+                </div>
+                
+                <div class="filter-options">
+                    <select class="filter-select">
+                        <option>Todos los medicamentos</option>
+                        <option>Analgésicos</option>
+                        <option>Antibióticos</option>
+                        <option>Antihipertensivos</option>
+                        <option>Antidiabéticos</option>
+                    </select>
+                    
+                    <select class="filter-select">
+                        <option>Cualquier fecha</option>
+                        <option>Válidos por 3+ meses</option>
+                        <option>Válidos por 6+ meses</option>
+                        <option>Válidos por 1+ año</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="medicines-grid">
+                <!-- Medicine Card 1 -->
+                <div class="medicine-card">
+                    <div class="medicine-image">
+                        <img src="https://images.unsplash.com/photo-1585435557343-3b092031d5ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Ibuprofeno">
+                    </div>
+                    <div class="medicine-info">
+                        <h3 class="medicine-name">Ibuprofeno 600mg</h3>
+                        <div class="medicine-details">
+                            <div class="medicine-detail">
+                                <span class="detail-label">Droga:</span>
+                                <span>Ibuprofeno</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Uso:</span>
+                                <span>Antiinflamatorio y analgésico</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Vencimiento:</span>
+                                <span class="expiry-date expiry-valid">15/12/2024</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Donante:</span>
+                                <span>María G.</span>
+                            </div>
+                        </div>
+                        <div class="medicine-actions">
+                            <button class="btn btn-outline">Ver detalles</button>
+                            <button class="btn btn-primary">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medicine Card 2 -->
+                <div class="medicine-card">
+                    <div class="medicine-image">
+                        <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Amoxicilina">
+                    </div>
+                    <div class="medicine-info">
+                        <h3 class="medicine-name">Amoxicilina 500mg</h3>
+                        <div class="medicine-details">
+                            <div class="medicine-detail">
+                                <span class="detail-label">Droga:</span>
+                                <span>Amoxicilina</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Uso:</span>
+                                <span>Antibiótico para infecciones</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Vencimiento:</span>
+                                <span class="expiry-date expiry-soon">30/09/2023</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Donante:</span>
+                                <span>Carlos R.</span>
+                            </div>
+                        </div>
+                        <div class="medicine-actions">
+                            <button class="btn btn-outline">Ver detalles</button>
+                            <button class="btn btn-primary">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medicine Card 3 -->
+                <div class="medicine-card">
+                    <div class="medicine-image">
+                        <img src="https://images.unsplash.com/photo-1550572017-3fdc2f2323f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Losartán">
+                    </div>
+                    <div class="medicine-info">
+                        <h3 class="medicine-name">Losartán 50mg</h3>
+                        <div class="medicine-details">
+                            <div class="medicine-detail">
+                                <span class="detail-label">Droga:</span>
+                                <span>Losartán Potásico</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Uso:</span>
+                                <span>Antihipertensivo</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Vencimiento:</span>
+                                <span class="expiry-date expiry-valid">20/05/2025</span>
+                            </div>
+                            <div class="medicine-detail">
+                                <span class="detail-label">Donante:</span>
+                                <span>Ana L.</span>
+                            </div>
+                        </div>
+                        <div class="medicine-actions">
+                            <button class="btn btn-outline">Ver detalles</button>
+                            <button class="btn btn-primary">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Form -->
+    <section class="how-it-works" id="donar">
+        <div class="container">
+            <div class="section-title">
+                <h2>Donar Medicamentos</h2>
+                <p>Completa el formulario para publicar tus medicamentos disponibles</p>
+            </div>
+            
+            <div class="form-container">
+                <form id="donation-form">
+                    <div class="form-group">
+                        <label for="medicine-name">Nombre del Medicamento</label>
+                        <input type="text" id="medicine-name" class="form-control" placeholder="Ej: Ibuprofeno 600mg">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="active-ingredient">Principio Activo (Droga)</label>
+                        <input type="text" id="active-ingredient" class="form-control" placeholder="Ej: Ibuprofeno">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="medicine-use">Para qué sirve</label>
+                        <textarea id="medicine-use" class="form-control" rows="3" placeholder="Describe el uso del medicamento"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expiry-date">Fecha de Vencimiento</label>
+                        <input type="date" id="expiry-date" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="medicine-image">Imagen del Medicamento</label>
+                        <input type="file" id="medicine-image" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Cantidad disponible</label>
+                        <input type="number" id="quantity" class="form-control" min="1" value="1">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Publicar Medicamento</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lo que dicen nuestros usuarios</h2>
+                <p>Experiencias reales de personas que han usado MedicShare</p>
+            </div>
+            
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Gracias a MedicShare pude conseguir la medicación para mi madre que no podíamos costear. La plataforma es muy fácil de usar y el proceso fue seguro."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Laura M.">
+                        </div>
+                        <div class="author-info">
+                            <h4>Laura M.</h4>
+                            <p>Receptora de medicamentos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Tenía medicamentos que ya no usaba y me daba pena tirarlos. Con MedicShare pude donarlos a personas que realmente los necesitaban. Muy satisfecho con la experiencia."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Roberto S.">
+                        </div>
+                        <div class="author-info">
+                            <h4>Roberto S.</h4>
+                            <p>Donante frecuente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Como farmacéutico, valoro mucho iniciativas como MedicShare que promueven el uso responsable de medicamentos y ayudan a quienes más lo necesitan."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Dra. Elena R.">
+                        </div>
+                        <div class="author-info">
+                            <h4>Dra. Elena R.</h4>
+                            <p>Farmacéutica colaboradora</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Section -->
+    <section class="features" style="background-color: #f9f9f9;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Apoya Nuestra Misión</h2>
+                <p>Tu donación nos ayuda a mantener la plataforma funcionando y llegar a más personas</p>
+            </div>
+            
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p style="margin-bottom: 30px;">MedicShare es completamente gratuito para usuarios, pero mantener la plataforma tiene costos. Considera hacer una donación para ayudarnos a seguir conectando medicamentos con quienes los necesitan.</p>
+                <button class="btn btn-primary" style="padding: 12px 30px; font-size: 1.1rem;">Hacer una Donación</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>MedicShare</h3>
+                    <ul>
+                        <li><a href="#nosotros">Sobre Nosotros</a></li>
+                        <li><a href="#como-funciona">Cómo Funciona</a></li>
+                        <li><a href="#preguntas">Preguntas Frecuentes</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Para Donantes</h3>
+                    <ul>
+                        <li><a href="#donar">Donar Medicamentos</a></li>
+                        <li><a href="#guias">Guías de Donación</a></li>
+                        <li><a href="#seguridad">Seguridad</a></li>
+                        <li><a href="#testimonios">Testimonios</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Para Receptores</h3>
+                    <ul>
+                        <li><a href="#buscar">Buscar Medicamentos</a></li>
+                        <li><a href="#solicitar">Cómo Solicitar</a></li>
+                        <li><a href="#criterios">Criterios de Elegibilidad</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#terminos">Términos de Uso</a></li>
+                        <li><a href="#privacidad">Política de Privacidad</a></li>
+                        <li><a href="#cookies">Política de Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 MedicShare. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simulación de funcionalidad básica
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejo del formulario de donación
+            const donationForm = document.getElementById('donation-form');
+            if (donationForm) {
+                donationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('¡Gracias por tu donación! Hemos recibido la información de tu medicamento y será publicada después de una verificación.');
+                    donationForm.reset();
+                });
+            }
+            
+            // Simulación de búsqueda
+            const searchInput = document.querySelector('.search-box input');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    // En una implementación real, aquí se filtrarían los resultados
+                    console.log('Buscando:', this.value);
+                });
+            }
+            
+            // Simulación de filtros
+            const filterSelects = document.querySelectorAll('.filter-select');
+            filterSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    // En una implementación real, aquí se aplicarían los filtros
+                    console.log('Filtro aplicado:', this.value);
+                });
+            });
+            
+            // Animación para los botones de donación
+            const donateButtons = document.querySelectorAll('.btn-primary');
+            donateButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
